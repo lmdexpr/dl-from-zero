@@ -23,8 +23,13 @@ let%test _ = or_ 1 0 = 1
 let%test _ = or_ 0 1 = 1
 let%test _ = or_ 1 1 = 1
 
-let xor x1 x2 = and_ (or_ x1 x2) (nand x1 x2)
+let ($|) f g x1 x2 = Tuple2.uncurry f @@ g x1 x2
+let( *|) f g x1 x2 = f x1 x2, g x1 x2
+
+let xor = and_ $| or_ *| nand
 let%test _ = xor 0 0 = 0
 let%test _ = xor 1 0 = 1
 let%test _ = xor 0 1 = 1
 let%test _ = xor 1 1 = 0
+
+
